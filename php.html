@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+    />
+
+    <title>PHP SNIPPETS</title>
+  </head>
+  <body>
+    <nav>
+      <h2><a href="index.html">HOME</a></h2>
+    </nav>
+    <h2>PHP Autoloader</h2>
+    <pre><code>
+    spl_autoload_register('loader');
+
+    function loader($classname){
+        $path='classes/';
+        $ext='.class.php';
+        $fullPath=$path.$classname.$ext;
+        require $fullPath;
+    }
+    </code> </pre>
+
+    <h2>PDO connection</h2>
+    <pre><code class="language-php">
+ class Db {
+
+    private $host='localhost';
+    private $dbname='oop';
+    private $user='newuser';
+    private $password='.!a9seuj_wBJtLWO';
+
+    protected function connect(){
+        $dsn='mysql:host='. $this->host .';dbname='.$this->dbname;
+        $pdo=new PDO($dsn,$this->user,$this->password);
+        // default fetching mode associative array
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
+        return $pdo;
+    }
+
+}
+   </code> </pre>
+
+    <h2>PDO database connection better way?</h2>
+    <pre><code>
+      protected function connect()
+    {
+        try {
+            $host = 'localhost';
+            $dbname = 'oop';
+            $user = 'newuser';
+            $password = 'Y[mB47Jf2cd_xcM]';
+            $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+            return $conn;
+        } catch (PDOException $e) {
+            print  "ERROR!:" . $e->getMessage() . "<'br'>";
+            die();
+        }
+    }
+      
+    </code></pre>
+
+    <h2>Fethcing (all)data with PDO without prepared statements</h2>
+    <pre><code>
+    public function getUsers(){
+        $sql='SELECT * FROM users';
+        $stmt=$this->connect()->query($sql);
+        $data=$stmt->fetch();
+        return $data;
+    }
+
+   </code></pre>
+
+    <h2>Fethcing PARTICULAR data with PDO WITH prepared statements</h2>
+    <pre><code>
+    public function getUsers($name,$surname){
+        $sql="SELECT * FROM users WHERE name=? AND surname=?";
+        $stmt=$this->connect()->prepare($sql);
+        $stmt->execute([$name,$surname]);
+        $data= $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        return  $data;
+    }
+
+   </code></pre>
+
+    <h2>Insert data with PDO WITH prepared statements</h2>
+    <pre><code>
+    protected function setUser($name, $surname, $birth_date){
+        $sql = "INSERT INTO users(name,surname,birth_date) VALUES (?,?,?)";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$name, $surname, $birth_date]);
+
+    }
+
+    </code></pre>
+
+    <h2>PHP mailer</h2>
+    <a href="https://github.com/PHPMailer/PHPMailer">Githab link</a>
+    <pre><code>
+    //Import PHPMailer classes into the global namespace
+    //These must be at the top of your script, not inside a function
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
+    //Load Composer's autoloader
+    require 'vendor/autoload.php';
+
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'user@example.com';                     //SMTP username
+        $mail->Password   = 'secret';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setFrom('from@example.com', 'Mailer');
+        $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
+        $mail->addAddress('ellen@example.com');               //Name is optional
+        $mail->addReplyTo('info@example.com', 'Information');
+        $mail->addCC('cc@example.com');
+        $mail->addBCC('bcc@example.com');
+
+        //Attachments
+        $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+        $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Here is the subject';
+        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        $mail->send();
+        echo 'Message has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+
+
+===================== SEND EMAIL ====================
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+
+    require 'vendor/src/Exception.php';
+    require 'vendor/src/PHPMailer.php';
+    require 'vendor/src/SMTP.php';
+
+
+    $email = '';
+    $message = '';
+    $subject = '';
+    $name = '';
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        $email = $_POST['email'];
+        $message = $_POST['message'];
+        $subject = $_POST['subject'];
+        $name = $_POST['name'];
+        $errors = [];
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            $errors[] = 'Please enter valid email address';
+        }
+        if ($subject == '') {
+            $errors[] = 'Please enter subject';
+        }
+        if ($message == '') {
+            $errors[] = 'Please enter message';
+        }
+
+    //    ============= use PHP MAILER  ==============
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'gmta.constantine@gmail.com';
+        $mail->Password = 'pvyuxuimybeixlzs';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+        //subject of the message
+        $mail->Subject = $subject;
+        // body of the message
+        $mail->Body = $message;
+        // enable html
+    // == $mail->isHTML(true);
+    //  setting values to object , name= sender name optional
+        $mail->setFrom($email,'George');
+        // Attachment ----------------------
+    //    $mail->addAttachment('uploads/a.jpg');
+    // recipient email adress
+        $mail->addAddress('gmta.constantine@gmail.com');
+    //    $mail->send();
+        if($mail->send()){
+            echo 'email is sent';
+            header('Location:index.php');
+        } else {
+            echo "Mailer Error :{$mail->ErrorInfo}";
+        }
+
+    </code></pre>
+
+    <h2>REGEX for username</h2>
+    <pre><code>
+====== allowed only uppercase,lowercase,numbers and underscore ====
+
+        if (!preg_match("/^[a-zA-Z0-9_]*$/", $this->username)) {
+            $result = false;
+        } else {
+            $result = true;
+        }
+    </code></pre>
+
+    <h2>Email validation</h2>
+    <pre><code>
+    if (!filter_var($this->email,FILTER_VALIDATE_EMAIL)) {
+        $result = false;
+    } else {
+        $result = true;
+    }
+
+    </code></pre>
+
+    <h2>mvc</h2>
+    <img src="ggg/Screenshot 2023-05-07 165757.png" alt="" />
+
+    <h2>Folder Structures in MVC</h2>
+    <img src="ggg/Screenshot 2023-05-08 004648.png" />
+
+    <h2>Controls and Actions</h2>
+    <img src="ggg/Screenshot 2023-05-08 004400.png" alt="" />
+
+      
+    </code></pre>
+
+    <h2>Email validation</h2>
+    <pre><code>
+
+      
+    </code></pre>
+
+    <h2>Email validation</h2>
+    <pre><code>
+
+      
+    </code></pre>
+  </body>
+</html>
