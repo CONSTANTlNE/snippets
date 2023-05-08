@@ -4,11 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link
+        <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
     />
+   
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+      
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/onedark.min.css">
 
     <title>PHP SNIPPETS</title>
   </head>
@@ -17,7 +21,7 @@
       <h2><a href="index.html">HOME</a></h2>
     </nav>
     <h2>PHP Autoloader</h2>
-    <pre><code>
+    <pre ><code>
     spl_autoload_register('loader');
 
     function loader($classname){
@@ -29,7 +33,7 @@
     </code> </pre>
 
     <h2>PDO connection</h2>
-    <pre><code class="language-php">
+    <pre><code>
  class Db {
 
     private $host='localhost';
@@ -248,8 +252,16 @@
       
     </code></pre>
 
-    <h2>Email validation</h2>
-    <pre><code>
+    <h2> Remove the question mark from the request but maintain the query string</h2>
+    <pre>
+     <code>
+      ===in root Folder .htaccess file must be created with following code
+      RewriteEngine On
+      RewriteBase /
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteCond %{REQUEST_FILENAME} !-d
+      RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+</code>
 
       
     </code></pre>
@@ -259,5 +271,7 @@
 
       
     </code></pre>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+          <script>hljs.highlightAll();</script>
   </body>
 </html>
