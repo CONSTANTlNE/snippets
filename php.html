@@ -16,9 +16,13 @@
 
     <title>PHP SNIPPETS</title>
   </head>
-  <body>
-    <nav>
-      <h2><a href="index.html">HOME</a></h2>
+  <body >
+    <nav style="display: flex; justify-content: space-between; font-size: 20px">
+      <a href="index.html">HOME</a>
+      <a href="php.html">PHP</a>
+      <a href="js.html">JS</a>
+      <a href="resources.html">Resources</a>
+      <a href="tipsandtricks.html">Tips and Tricks</a>
     </nav>
     <h2>PHP Autoloader</h2>
     <pre ><code>
@@ -73,11 +77,13 @@
 
     <h2>Fethcing (all)data with PDO without prepared statements</h2>
     <pre><code>
-    public function getUsers(){
-        $sql='SELECT * FROM users';
-        $stmt=$this->connect()->query($sql);
-        $data=$stmt->fetch();
-        return $data;
+    public function GetUsers ()
+    {
+      $sql='SELECT * FROM article';
+      $stm=$this->connect()->prepare($sql);
+      $stm->execute();
+      $data=$stm->fetchAll();
+      return $data;
     }
 
    </code></pre>
@@ -89,6 +95,9 @@
         $stmt=$this->connect()->prepare($sql);
         $stmt->execute([$name,$surname]);
         $data= $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        ======================
+        $data=$stm->fetch(PDO::FETCH_ASSOC);  <<<< for single array
+        ========================
         return  $data;
     }
 
@@ -108,6 +117,9 @@
     <h2>PHP mailer</h2>
     <a href="https://github.com/PHPMailer/PHPMailer">Githab link</a>
     <pre><code>
+
+    =====composer require phpmailer/phpmailer=====
+
     //Import PHPMailer classes into the global namespace
     //These must be at the top of your script, not inside a function
     use PHPMailer\PHPMailer\PHPMailer;
@@ -241,6 +253,14 @@
     </code></pre>
 
     <h2>mvc</h2>
+    <pre><code>
+    VIEW sends data to CONTROLLER    
+    CONTROLLER requires MODEL and only inserts data
+    VIEW requires MODEL and displays data
+    
+    </code></pre>
+    <img src="ggg/mvc2.png" alt="" />
+
     <img src="ggg/Screenshot 2023-05-07 165757.png" alt="" />
 
     <h2>Folder Structures in MVC</h2>
@@ -252,6 +272,8 @@
       
     </code></pre>
 
+
+
     <h2> Remove the question mark from the request but maintain the query string</h2>
     <pre>
      <code>
@@ -261,16 +283,63 @@
       RewriteCond %{REQUEST_FILENAME} !-f
       RewriteCond %{REQUEST_FILENAME} !-d
       RewriteRule ^(.*)$ index.php?$1 [L,QSA]
-</code>
+    </code>    </pre>
 
+
+    <h2>Autoload with Composer</h2>
+      <pre><code>
+      In your composer.json file, add an autoload section that defines the
+      namespace and path of your classes. 
+
+      {
+    "autoload": {
+        "classmap": [
+            "MyClass.php",
+            "MyOtherClass.php"
+        ]
+          }
+      }
+         
+      Run 
+     <<< php C:\ProgramData\ComposerSetup\bin\composer.phar dump-autoload >>> in terminal
+      to generate the autoloader files. This will create a vendor/autoload.php
+      file that you can include in your PHP code to automatically load classes.
+   </code></pre>
+
+
+      <h2>SQL INDEX</h2>
+    <pre><code>
+WHENEVER we use 'WHERE' or 'ORDER BY' in query, any columns in WHERE clause should have index!!!
       
     </code></pre>
 
-    <h2>Email validation</h2>
+
+    <h2>SQL ORDER</h2>
+    <pre><code>
+When we use SELECT * FROM in SQL, data could come back in any order, if we want in 
+specific order we can use  ORDER BY in sql statement(results in ascending order) if 
+we want in descending order, at the end of query we add DESC keyword
+      
+    </code></pre>
+
+      <h2>Secure folder from Accessing directly</h2>
+    <pre><code>
+        create .htaccess file with content  ' Deny from all '
+      
+    </code></pre>
+
+      <h2>EDIT</h2>
     <pre><code>
 
       
     </code></pre>
+
+
+
+
+
+
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
           <script>hljs.highlightAll();</script>
   </body>
