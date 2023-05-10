@@ -75,7 +75,7 @@
       
     </code></pre>
 
-    <h2>Fethcing (all)data with PDO without prepared statements</h2>
+    <h2>SQLFethcing (all)data with PDO without prepared statements</h2>
     <pre><code>
     public function GetUsers ()
     {
@@ -88,7 +88,7 @@
 
    </code></pre>
 
-    <h2>Fethcing PARTICULAR data with PDO WITH prepared statements</h2>
+    <h2> SQL Fethcing PARTICULAR data with PDO WITH prepared statements</h2>
     <pre><code>
     public function getUsers($name,$surname){
         $sql="SELECT * FROM users WHERE name=? AND surname=?";
@@ -101,9 +101,10 @@
         return  $data;
     }
 
+
    </code></pre>
 
-    <h2>Insert data with PDO WITH prepared statements</h2>
+    <h2>SQL Insert data with PDO WITH prepared statements</h2>
     <pre><code>
     protected function setUser($name, $surname, $birth_date){
         $sql = "INSERT INTO users(name,surname,birth_date) VALUES (?,?,?)";
@@ -113,6 +114,33 @@
     }
 
     </code></pre>
+
+
+
+    <h2>SQL Update DATA </h2>
+    <pre><code>
+    protected function update_data($title,$content,$date,$id){
+
+        $sql="UPDATE article SET title=?,content=?,published_at=? WHERE id=?";
+        $stmt=$this->connect()->prepare($sql);
+        return $stmt->execute([$title,$content,$date,$id]);
+
+    }
+    </code></pre>
+       </code></pre>
+
+    <h2>SQL Delete Data </h2>
+    <pre><code>
+    protected function delete_data($id){
+
+        $sql="DELETE FROM article WHERE id=?";
+        $stmt=$this->connect()->prepare($sql);
+        return $stmt->execute([$id]);
+
+    }
+    </code></pre>
+
+
 
     <h2>PHP mailer</h2>
     <a href="https://github.com/PHPMailer/PHPMailer">Githab link</a>
