@@ -15,12 +15,23 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/onedark.min.css">
 
     <title>PHP SNIPPETS</title>
+        <style>
+          
+      @media (max-width: 400px) {
+        nav {
+          flex-wrap: wrap;
+          align-items: center;
+        }
+      }
+    </style>
   </head>
   <body >
-    <nav style="display: flex; justify-content: space-between; font-size: 20px">
+    <nav style="display: flex; justify-content: space-evenly; font-size: 20px">
       <a href="index.html">HOME</a>
-      <a href="php.html">PHP</a>
+
       <a href="js.html">JS</a>
+      <a href="libraries.html">Libraries</a>
+
       <a href="resources.html">Resources</a>
       <a href="tipsandtricks.html">Tips and Tricks</a>
     </nav>
@@ -136,13 +147,12 @@
         $sql="DELETE FROM article WHERE id=?";
         $stmt=$this->connect()->prepare($sql);
         return $stmt->execute([$id]);
-
     }
     </code></pre>
 
 
 
-    <h2>PHP mailer</h2>
+    <h2>PHP mailer OFFICIAL</h2>
     <a href="https://github.com/PHPMailer/PHPMailer">Githab link</a>
     <pre><code>
 
@@ -196,68 +206,115 @@
     }
 
 
-===================== SEND EMAIL ====================
-
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
+    </code></pre>
 
 
-    require 'vendor/src/Exception.php';
-    require 'vendor/src/PHPMailer.php';
-    require 'vendor/src/SMTP.php';
+    <h2>PHP MAILER WITH FORM AND VALIDATION</h2>
+    <pre><code>
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 
-    $email = '';
-    $message = '';
-    $subject = '';
-    $name = '';
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+require 'vendor/src/Exception.php';
+require 'vendor/src/PHPMailer.php';
+require 'vendor/src/SMTP.php';
 
-        $email = $_POST['email'];
-        $message = $_POST['message'];
-        $subject = $_POST['subject'];
-        $name = $_POST['name'];
-        $errors = [];
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $errors[] = 'Please enter valid email address';
-        }
-        if ($subject == '') {
-            $errors[] = 'Please enter subject';
-        }
-        if ($message == '') {
-            $errors[] = 'Please enter message';
-        }
 
-    //    ============= use PHP MAILER  ==============
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'gmta.constantine@gmail.com';
-        $mail->Password = 'pvyuxuimybeixlzs';
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
-        //subject of the message
-        $mail->Subject = $subject;
-        // body of the message
-        $mail->Body = $message;
-        // enable html
-    // == $mail->isHTML(true);
-    //  setting values to object , name= sender name optional
-        $mail->setFrom($email,'George');
-        // Attachment ----------------------
-    //    $mail->addAttachment('uploads/a.jpg');
-    // recipient email adress
-        $mail->addAddress('gmta.constantine@gmail.com');
-    //    $mail->send();
-        if($mail->send()){
-            echo 'email is sent';
-            header('Location:index.php');
-        } else {
-            echo "Mailer Error :{$mail->ErrorInfo}";
-        }
+$email = '';
+$message = '';
+$subject = '';
+$name = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+    $subject = $_POST['subject'];
+    $name = $_POST['name'];
+    $errors = [];
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        $errors[] = 'Please enter valid email address';
+    }
+    if ($subject == '') {
+        $errors[] = 'Please enter subject';
+    }
+    if ($message == '') {
+        $errors[] = 'Please enter message';
+    }
+
+//    ============= use PHP MAILER  ==============
+    $mail = new PHPMailer();
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'gmta.constantine@gmail.com';
+    $mail->Password = 'pvyuxuimybeixlzs';
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+    //subject of the message
+    $mail->Subject = $subject;
+    // body of the message
+    $mail->Body = $message;
+    // enable html
+// == $mail->isHTML(true);
+//  setting values to object , name= sender name optional
+    $mail->setFrom($email,'George');
+    // Attachment ----------------------
+//    $mail->addAttachment('uploads/a.jpg');
+// recipient email adress
+    $mail->addAddress('gmta.constantine@gmail.com');
+//    $mail->send();
+    if($mail->send()){
+        echo 'email is sent';
+        header('Location:index.php');
+    } else {
+        echo "Mailer Error :{$mail->ErrorInfo}";
+    }
+
+
+}
+
+?>
+
+
+<!--======= DISPLAY ERRORS-->
+<?php if (!empty($errors)): ?>
+    <ol>
+        <?php foreach ($errors as $err): ?>
+            <li><?= $err ?></li>
+        <?php endforeach; ?>
+    </ol>
+<?php endif; ?>
+
+<iframe >
+<form method="post">
+
+    <div>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="<?= htmlspecialchars($name) ?>">
+        <label for="email">Your Email</label>
+        <input type="email" name="email" id="email" value="<?= htmlspecialchars($email) ?>">
+        <label for="subject">Subject</label>
+        <input type="text" name="subject" id="subject" value="<?= htmlspecialchars($subject) ?>">
+        <label for="message">Message</label>
+        <textarea name="message" id="message"><?= htmlspecialchars($message) ?></textarea>
+        <button>Send</button>
+    </div>
+
+</form>
+
+</iframe>
+      
+
+
+
 
     </code></pre>
+    
+
+
+
+
+
 
     <h2>REGEX for username</h2>
     <pre><code>
@@ -356,14 +413,207 @@ we want in descending order, at the end of query we add DESC keyword
       
     </code></pre>
 
-      <h2>EDIT</h2>
+      <h2>SESSION DESTROY</h2>
     <pre><code>
+    < ?php
+    // Initialize the session.
+    // If you are using session_name("something"), don't forget it now!
+    session_start();
 
+    // Unset all of the session variables.
+    $_SESSION = array();
+
+    // If it's desired to kill the session, also delete the session cookie.
+    // Note: This will destroy the session, and not just the session data!
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    // Finally, destroy the session.
+    session_destroy();
+    ? >
+        
+    </code></pre>
+
+      <h2>LOG IN AND AUTH</h2>
+    <pre><code>
+    ===ON LOGIN PAGE START SESSION AND SET $_SESSION['logged_in']=true===
+
+session_start();
+if($_SERVER['REQUEST_METHOD']=='POST' && $_POST['username']=='constantine' && $_POST['password']==='123' ){
+    //for more security
+    session_regenerate_id(true);
+    $_SESSION['logged_in']=true;
+    header('Location:index.php');
+}
+    ===== CREATE AUTH FILE ====
+    function is_logged_in (){
+//    returns boolean value
+  return  isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
+}  
+
+   ==== RESTRICT ACCESS!!! TO ANY PAGE IF NOT LOGGED IN ====
+
+    require  'includes/auth.includes.php';
+    session_start();
+    if (!is_logged_in()){
+        die('Please log in first');
+    }
+
+    </code></pre>
+
+
+      <h2>Hashing a password</h2>
+    <pre><code>
+        $pass=123;
+        //$hash=password_hash($pass,PASSWORD_DEFAULT);
+        //echo $hash;
+        $a='$2y$10$AYYMqqTcajJUhfOxqZAp.ONcI7O38vmJQZ05VyFyXYbSMU1X7fjjS';
+        var_dump(password_verify($pass,$a));
+    </code></pre>
+
+      <h2>Authenticate USER</h2>
+    <pre><code>
+class User_model extends Db_model {
+   protected function authenticate($username){
+       $sql = "SELECT * FROM users WHERE username=?";
+       $stm = $this->connect()->prepare($sql);
+       $stm->execute([$username]);
+       $data = $stm->fetch(PDO::FETCH_ASSOC);
+       return $data;
+   }
+
+}
+
+====================== CHECK IF PASSWORD FOR THAT USER IS VALID ============
+
+    public function __construct($username,$password)
+    {
+        session_start();
+        $_SESSION['logged_in'] = true;
+        session_regenerate_id(true);
+        $users = $this->authenticate($username);
+
+        if (!$users) {
+            var_dump( password_verify((int)$password,$users['password']));
+
+        } elseif
+        ($users['username'] === $username && password_verify((int)$password,$users['password'])) {
+            header('Location:../index.php');
+        } else {
+
+            echo 'error';
+        }
+
+    }
+      
+    </code></pre>
+
+      <h2>FilE UPLOAD</h2>
+    <pre><code>
+   Restrict File Size 
+
+   create .htaccess file with : 
+
+   php_value upload_max_filesize 1M
+
+   To turn off startup errors 
+
+   Php_flag display_startup_errors off
       
     </code></pre>
 
 
 
+    <h2>FILE UPLOAD AND VALIDATION</h2>
+    <pre><code>
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        if (empty($_FILES)) {
+            // to handle very large uploads which exceeds post_max_size in ini settings
+            throw new Exception('Invalid upload');
+        }
+        switch ($_FILES['file']['error']) {
+            case UPLOAD_ERR_OK:
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                throw new Exception('Please attach a file');
+
+            case UPLOAD_ERR_INI_SIZE:
+                throw new Exception('Max file size 1MB');
+
+            default:
+                throw new Exception('Error during upload');
+        }
+        // restrict file size upload
+        if ($_FILES['file']['size'] > 1000000) {
+            throw new Exception('Max file size allowed 1MB');
+        }
+        // restrict file types
+        $mime_types = ['image/gif', 'image/png', 'image/jpeg'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type = finfo_file($finfo, $_FILES['file']['tmp_name']);
+        if (!in_array($mime_type, $mime_types)) {
+            throw new Exception('file format should be gif, jpeg or png');
+        }
+        // upload file directory and filename sanitization
+        $pathinfo = pathinfo($_FILES['file']['name']);
+        //filename without extension
+        $base = $pathinfo['filename'];
+        // replace any characters that we don't want to allow
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base);
+        // create new filename
+        $filename = $base . "." . $pathinfo['extension'];
+        // full destination path
+        $destination = "images/$filename";
+        // check if file exists(filename) and save with different name
+        $i = 1;
+        while (file_exists($destination)) {
+            $filename = $base . "-$i." . $pathinfo['extension'];
+            $destination = "images/$filename";
+            $i++;
+
+        }
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $destination)) {
+            echo 'File uploaded successfully';
+        } else {
+            throw new Exception('Unable to upload the file');
+        }
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+}
+
+?>
+<iframe>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file">
+    <button>upload</button>
+</form>
+</iframe>
+
+      
+    </code></pre>
+
+    <h2>EDIT</h2>
+    <pre><code>
+
+      
+    </code></pre>
+
+    <h2>EDIT</h2>
+    <pre><code>
+
+      
+    </code></pre>
 
 
 

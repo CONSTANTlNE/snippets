@@ -20,12 +20,25 @@
     />
 
     <title>MY STUFF</title>
+    <style>
+      li {
+        list-style: none;
+        background-color: black;
+      }
+      @media (max-width: 400px) {
+        nav {
+          flex-wrap: wrap;
+          align-items: center;
+        }
+      }
+    </style>
   </head>
   <body>
-    <nav style="display: flex; justify-content: space-between; font-size: 20px">
+    <nav style="display: flex; justify-content: space-evenly; font-size: 20px">
       <a href="index.html">HOME</a>
       <a href="php.html">PHP</a>
       <a href="js.html">JS</a>
+      <a href="libraries.html">Libraries</a>
       <a href="resources.html">Resources</a>
       <a href="tipsandtricks.html">Tips and Tricks</a>
     </nav>
