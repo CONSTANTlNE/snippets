@@ -150,6 +150,17 @@
     }
     </code></pre>
 
+    
+    <h2>SQL ONE TO MANY </h2>
+    <P> TO SELECT ALL CORRESPONDING DATA</P>
+    <pre><code>
+SELECT * FROM `article` JOIN category WHERE article.category_id = category.id
+
+    </code></pre>
+    <P>TO SELECT ALL CORRESPONDING DATA FROM FRIST TABLE EVEN IF SECOND TABLE ITMS IS NOT ADDED</P>
+    <pre><code>
+SELECT * FROM `article` LEFT JOIN category ON article.category_id = category.id
+    </code></pre>
 
 
     <h2>PHP mailer OFFICIAL</h2>
